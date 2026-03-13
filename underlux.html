@@ -1,0 +1,386 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>UnderLux</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&family=VT323:wght@400&display=swap');
+
+:root {
+  --gold: #f5c518;
+  --dark: #0a0010;
+  --purple: #6b00b0;
+  --pink: #ff2d78;
+  --cyan: #00e5ff;
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+body {
+  background: var(--dark);
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  cursor: default;
+}
+
+/* Grade de fundo */
+.grid-bg {
+  position: fixed;
+  inset: 0;
+  background-image: 
+    linear-gradient(rgba(107,0,176,0.15) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(107,0,176,0.15) 1px, transparent 1px);
+  background-size: 40px 40px;
+  animation: gridMove 20s linear infinite;
+}
+
+@keyframes gridMove {
+  0% { transform: translateY(0); }
+  100% { transform: translateY(40px); }
+}
+
+/* Vinheta */
+.vignette {
+  position: fixed;
+  inset: 0;
+  background: radial-gradient(ellipse at center, transparent 40%, rgba(0,0,0,0.85) 100%);
+  pointer-events: none;
+}
+
+/* Partículas */
+.particles {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+}
+
+.particle {
+  position: absolute;
+  width: 3px;
+  height: 3px;
+  border-radius: 50%;
+  animation: floatUp linear infinite;
+}
+
+@keyframes floatUp {
+  0% { transform: translateY(100vh) scale(0); opacity: 0; }
+  10% { opacity: 1; }
+  90% { opacity: 0.5; }
+  100% { transform: translateY(-100px) scale(1); opacity: 0; }
+}
+
+/* Container principal */
+.container {
+  position: relative;
+  z-index: 10;
+  text-align: center;
+  padding: 20px;
+}
+
+/* Logo */
+.logo-wrap {
+  margin-bottom: 10px;
+  animation: logoFloat 3s ease-in-out infinite;
+}
+
+@keyframes logoFloat {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-8px); }
+}
+
+.logo {
+  font-family: 'Press Start 2P', monospace;
+  font-size: clamp(28px, 8vw, 56px);
+  color: var(--gold);
+  text-shadow: 
+    0 0 20px rgba(245,197,24,0.8),
+    0 0 40px rgba(245,197,24,0.4),
+    4px 4px 0 rgba(107,0,176,0.8),
+    8px 8px 0 rgba(0,0,0,0.5);
+  letter-spacing: 4px;
+  animation: logoPulse 2s ease-in-out infinite;
+}
+
+@keyframes logoPulse {
+  0%, 100% { text-shadow: 0 0 20px rgba(245,197,24,0.8), 0 0 40px rgba(245,197,24,0.4), 4px 4px 0 rgba(107,0,176,0.8), 8px 8px 0 rgba(0,0,0,0.5); }
+  50% { text-shadow: 0 0 30px rgba(245,197,24,1), 0 0 60px rgba(245,197,24,0.6), 0 0 80px rgba(255,45,120,0.3), 4px 4px 0 rgba(107,0,176,0.8), 8px 8px 0 rgba(0,0,0,0.5); }
+}
+
+.subtitle {
+  font-family: 'VT323', monospace;
+  font-size: clamp(14px, 3vw, 20px);
+  color: var(--cyan);
+  letter-spacing: 6px;
+  text-transform: uppercase;
+  margin-top: 8px;
+  opacity: 0.8;
+}
+
+/* Linha decorativa */
+.divider {
+  width: 300px;
+  height: 2px;
+  margin: 25px auto;
+  background: linear-gradient(90deg, transparent, var(--gold), var(--pink), var(--gold), transparent);
+  animation: shimmer 2s linear infinite;
+  background-size: 200% 100%;
+}
+
+@keyframes shimmer {
+  0% { background-position: -200% 0; }
+  100% { background-position: 200% 0; }
+}
+
+/* Personagem pixel art */
+.character {
+  font-size: 60px;
+  margin: 10px 0;
+  animation: charBob 1s steps(2) infinite;
+  display: block;
+}
+
+@keyframes charBob {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-4px); }
+}
+
+/* Menu */
+.menu {
+  margin: 25px 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+}
+
+.menu-item {
+  font-family: 'Press Start 2P', monospace;
+  font-size: clamp(10px, 2.5vw, 14px);
+  color: white;
+  padding: 12px 30px;
+  border: 2px solid rgba(255,255,255,0.2);
+  background: rgba(107,0,176,0.3);
+  cursor: pointer;
+  transition: all 0.15s;
+  position: relative;
+  min-width: 220px;
+  letter-spacing: 1px;
+}
+
+.menu-item::before {
+  content: '▶';
+  position: absolute;
+  left: 10px;
+  opacity: 0;
+  color: var(--gold);
+  transition: opacity 0.1s;
+}
+
+.menu-item:hover {
+  background: rgba(245,197,24,0.2);
+  border-color: var(--gold);
+  color: var(--gold);
+  transform: scale(1.05);
+  box-shadow: 0 0 20px rgba(245,197,24,0.3);
+}
+
+.menu-item:hover::before {
+  opacity: 1;
+}
+
+.menu-item.destaque {
+  border-color: var(--pink);
+  color: var(--pink);
+  animation: blink 1s step-end infinite;
+}
+
+@keyframes blink {
+  0%, 100% { border-color: var(--pink); }
+  50% { border-color: transparent; }
+}
+
+/* Versão */
+.version {
+  font-family: 'VT323', monospace;
+  font-size: 16px;
+  color: rgba(255,255,255,0.3);
+  margin-top: 15px;
+  letter-spacing: 2px;
+}
+
+/* Rodapé */
+.footer {
+  font-family: 'VT323', monospace;
+  font-size: 16px;
+  color: rgba(255,255,255,0.2);
+  margin-top: 10px;
+  letter-spacing: 1px;
+}
+
+/* Overlay de loading */
+.loading-overlay {
+  position: fixed;
+  inset: 0;
+  background: black;
+  z-index: 100;
+  display: none;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.loading-overlay.show {
+  display: flex;
+}
+
+.loading-text {
+  font-family: 'Press Start 2P', monospace;
+  font-size: 14px;
+  color: var(--gold);
+  animation: blink2 0.5s step-end infinite;
+}
+
+@keyframes blink2 {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0; }
+}
+
+.loading-bar-wrap {
+  width: 300px;
+  height: 20px;
+  border: 2px solid var(--gold);
+  padding: 2px;
+}
+
+.loading-bar {
+  height: 100%;
+  width: 0%;
+  background: linear-gradient(90deg, var(--purple), var(--pink), var(--gold));
+  transition: width 0.1s linear;
+}
+
+.hp-text {
+  font-family: 'VT323', monospace;
+  font-size: 20px;
+  color: white;
+}
+
+/* Scan lines */
+.scanlines {
+  position: fixed;
+  inset: 0;
+  background: repeating-linear-gradient(
+    0deg,
+    transparent,
+    transparent 2px,
+    rgba(0,0,0,0.08) 2px,
+    rgba(0,0,0,0.08) 4px
+  );
+  pointer-events: none;
+  z-index: 50;
+}
+</style>
+</head>
+<body>
+
+<div class="grid-bg"></div>
+<div class="vignette"></div>
+<div class="scanlines"></div>
+<div class="particles" id="particles"></div>
+
+<div class="container">
+  <div class="logo-wrap">
+    <div class="logo">UNDERLUX</div>
+    <div class="subtitle">† Uma Jornada nas Sombras †</div>
+  </div>
+
+  <div class="divider"></div>
+
+  <span class="character">⚔️</span>
+
+  <div class="menu">
+    <div class="menu-item destaque" onclick="startGame()">NOVO JOGO</div>
+    <div class="menu-item" onclick="startGame()">CONTINUAR</div>
+    <div class="menu-item" onclick="startGame()">CONFIGURAÇÕES</div>
+    <div class="menu-item" onclick="startGame()">CRÉDITOS</div>
+  </div>
+
+  <div class="version">v1.0.0 — EDIÇÃO ESPECIAL</div>
+  <div class="footer">© 2026 UnderLux Studios • Todos os direitos reservados</div>
+</div>
+
+<div class="loading-overlay" id="loadingOverlay">
+  <div class="loading-text">CARREGANDO...</div>
+  <div class="loading-bar-wrap">
+    <div class="loading-bar" id="loadingBar"></div>
+  </div>
+  <div class="hp-text" id="loadingPercent">0%</div>
+</div>
+
+<script>
+  // Partículas
+  const colors = ['#f5c518', '#ff2d78', '#00e5ff', '#6b00b0', '#ffffff'];
+  for (let i = 0; i < 30; i++) {
+    const p = document.createElement('div');
+    p.className = 'particle';
+    p.style.cssText = `
+      left: ${Math.random() * 100}%;
+      background: ${colors[Math.floor(Math.random() * colors.length)]};
+      animation-duration: ${4 + Math.random() * 8}s;
+      animation-delay: ${Math.random() * 6}s;
+      width: ${1 + Math.random() * 3}px;
+      height: ${1 + Math.random() * 3}px;
+    `;
+    document.getElementById('particles').appendChild(p);
+  }
+
+  // Função de "iniciar jogo" = rickroll
+  function startGame() {
+    const overlay = document.getElementById('loadingOverlay');
+    const bar = document.getElementById('loadingBar');
+    const percent = document.getElementById('loadingPercent');
+    
+    overlay.classList.add('show');
+    
+    let progress = 0;
+    const fakeLoads = [
+      { target: 30, speed: 80 },
+      { target: 60, speed: 120 },
+      { target: 85, speed: 60 },
+      { target: 99, speed: 200 },
+    ];
+    
+    let phase = 0;
+    
+    function animate() {
+      if (phase >= fakeLoads.length) {
+        bar.style.width = '100%';
+        percent.textContent = '100%';
+        setTimeout(() => {
+          window.location.href = 'https://youtu.be/DLzxrzFCyOs?si=iBWVnZmaQaGTEjW9';
+        }, 500);
+        return;
+      }
+      
+      const current = fakeLoads[phase];
+      if (progress < current.target) {
+        progress += 1;
+        bar.style.width = progress + '%';
+        percent.textContent = progress + '%';
+        setTimeout(animate, current.speed);
+      } else {
+        phase++;
+        setTimeout(animate, 300);
+      }
+    }
+    
+    setTimeout(animate, 500);
+  }
+</script>
+</body>
+</html>
